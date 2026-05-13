@@ -1,0 +1,28 @@
+# Rename `app` after first deploy, or run: fly launch --no-deploy --copy-config
+app = "fly-request-echo"
+primary_region = "iad"
+
+[build]
+
+[env]
+  PORT = "8080"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = "stop"
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ["app"]
+
+[[http_service.checks]]
+  grace_period = "10s"
+  interval = "30s"
+  method = "GET"
+  path = "/health"
+  protocol = "http"
+  timeout = "5s"
+
+[[vm]]
+  memory = "256mb"
+  cpus = 1
